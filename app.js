@@ -267,8 +267,9 @@ try {
 
     console.log('building new client');
 
-      try {
+      // try {
         await chatclient.writeFile('nick.txt', user);
+        console.log(rv);
         await chatclient.writeFile('message.txt', user + ' joined.');
         const file = await me.readFile('index.html');
         await chatclient.writeFile('index.html', file);
@@ -277,10 +278,10 @@ try {
         file = await me.readFile('addresses.json');
         await chatclient.writeFile('addresses.json', file);
         alert("done - navigating to new chat client");
-      } catch (err) {
-        alert('failed to build new client, go ahead and fork this one');
-        console.log(err);
-      }
+      // } catch (err) {
+      //   alert('failed to build new client');
+      //   console.log(err);
+      // }
   
 
   // if success, then create new client dat, which watches all current addresses, and polls this dat for new ones to add
