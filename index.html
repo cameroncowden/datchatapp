@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+  <head>
+    <title>chatlair</title>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+      body {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+        box-sizing: border-box;
+      }
+      header { 
+        text-align: center;
+      }
+
+      #chatbox {
+        width: 80vw;
+        height: 50vh;
+        margin: 0 auto;
+        position: relative;
+        background: ghostwhite;
+      }
+      div#users {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding: 10px;
+          box-sizing: border-box;
+          background: rgba(41,41,41,.3);
+          width: 200px;
+          height: 100%;
+      }
+
+      div#messages {
+          padding: 10px;
+      }
+      .chat-inputs form {
+          position: absolute;
+          width: 100%;
+          left: 0;
+          bottom: 0;
+          padding: 0 .2rem 0.2rem .2rem;
+          display: flex;
+          align-items: stretch;
+          box-sizing: border-box;
+      }
+      .chat-inputs input {
+          flex-basis: 70%;
+          display: block;
+          /* height: 1rem; */
+      }
+
+      .chat-inputs button {
+          flex-basis: 30%;
+          margin-left: .2rem;
+          display: block;
+          margin-top: 0;
+          margin-bottom: 0;
+      }
+      #controls {
+          max-width: 40vw;
+          margin: 0 auto;
+          text-align: center;
+      }
+    </style>
+    <script type="text/javascript" src="dat://d35579620ba9e3725c22f530450b4d9e0811ad5db58cb5817170d6d8ae8e8318/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="dat://d35579620ba9e3725c22f530450b4d9e0811ad5db58cb5817170d6d8ae8e8318/js/swal-7.19.1.min.js"></script>
+    <script src="app.js"></script>
+  </head>
+  <body onload="setup();">
+    <header>
+      <h1>chatlair: p2p chat room server</h1>
+    </header>
+    <main>
+      <section id="chatbox">
+        <div id="messages"></div>
+        <div id="users"></div>
+        <div class="chat-inputs">
+          <form id="messageForm">
+            <input type="text" name="message">
+            <button id="send" type="submit">Send</button>
+          </form>
+          
+        </div>
+      </section>
+      <section id="controls" class="guest-only">
+        <p id="prompt">choose a username:</p>
+        <input type="text" id="username">
+        <button id="register">Join Chat</button>
+      </section>
+      <section class="admin-only">
+        Add User:
+        <form id="subscribeForm">
+          <input type="text" name="address" placeholder="dat://..."></input>
+          <button type="submit">ADD USER</button>
+        </form>
+      </section>
+      <section id="chatrequests" class="admin-only">
+        Join Requests: <button id="refresh-joiners">REFRESH</button>
+      </section>
+    </main>
+    
+    <!-- <script src="js/index.js"></script> -->
+    <script type="text/javascript">
+       async function chatrat() {
+        // browser check
+        if (!navigator.userAgent.includes('BeakerBrowser')) {
+          alert('only works in Beaker Browser!')
+          return
+        }
+
+        // airtable api key keymEvEZKtuDcxhnV
+
+
+
+        // set vars
+        var archive, archiveInfo, admin, user
+
+        //try {
+          archive = new DatArchive(window.location);
+          archiveInfo = await archive.getInfo();
+
+          oo_origin = archiveInfo;
+
+          console.log(archiveInfo);
+
+          if (archiveInfo.isOwner) {
+            admin = true;
+            //console.log('hi admin, welcome home.')
+            //$('.admin-only').show();
+            //$('.guest-only').hide();
+            // //todo get username for admin
+            // user = 'admin';
+            // $('#username').hide();
+            // $('#register').hide();
+            // $('#prompt').text("your username:");
+            // $('#controls').append('<p>admin</>');
+          } else {
+            $('.guest-only').show();
+            $('.admin-only').hide();
+            // var username = window.localStorage.getItem('username');
+            // if (username) {
+            //   user = username;
+            // } else {
+            //   alert('pick a username to join the chat');
+            // }
+
+          }
+
+
+
+        // $('#send').on("click", function(){
+        //   var message = $('#message').val();
+        //   var time = new Date();
+        //   var timestamp = time.toISOString();
+        //   console.log(message);
+        //   console.log(timestamp);
+        //   $('#message').val("");
+        //   $('#chatbox').append('<p>' + timestamp + '>' + user + ': ' + message + '</p>');
+        // });
+
+        // $('#register').on("click", function(e){
+        //   e.preventDefault();
+
+          
+          
+
+
+        //   if(admin) {
+        //     $('#chatrequests').append('<p>' + user + ' wants to join chat from <new url>:');
+        //     $('#chatrequests').append('<p>really - check the google form or other location for join requests</p>');
+        //   }
+          
+
+        // });
+
+        // on clicking join chat
+        // create a new dat, and log the new dat's url to the sources html and save the changes,
+        // put it as a request
+        // which then the owner can approve
+        // which then pings/polls the (new) remote dat for any messages.
+
+        //the new dat created automatically polls from the original dat url
+
+
+        // } catch (err) {
+        //   alert('Unable to reach this chatroom.')
+        // } 
+      }
+      chatrat();
+    </script>
+    
+    <!-- <script type="text/javascript">
+        var connection;
+
+        console.log(webdb)
+        var ul = new webdb('upstream_lookup'); // use a unique ID to isolate from other scripts
+        console.log(ul);
+
+        var users = ul.createTable('users', {
+            'id': {type: Number, pk:true}, 
+            'admin': {type:Number, admin:false},
+            'username': {type:String, length:32, unique:true}
+        }); 
+
+        var messages = ul.createTable('messages', {
+            'id': {type: Number, pk:true}, 
+            'version': {type:Number, version:true},
+            'text': {type:String, length:128, index:true},
+            'username': {type:String, length:32, index:true},
+            'previous_post': {type:Number, index:true }, 
+            'username_registered': {type:Number, fk:'users'}
+        });
+
+        var all_messages = messages.get();
+        console.log(all_messages);
+
+        ul.users.set(
+          [
+            {
+                'id': 00000000, 
+                'admin': 1,
+                'username': 'admin'
+            }
+          ]
+         );
+
+        ul.messages.set(
+          [
+            {
+                'id': 00000001, 
+                'version': 00000001,
+                'text': 'welcome to server: [test server]',
+                'username': 'admin',
+                'previous_post': 00000000, 
+                'username_registered': 'admin'
+            }
+          ]
+         );
+
+        var all_users = users.get();
+        console.log('users:');
+        console.log(users);
+
+        var all_messages = messages.get();
+        console.log('messages:');
+        console.log(all_messages);
+
+        connection = ul;
+
+       
+     
+
+        
+        
+
+      
+    </script> -->
+    
+  </body>
+</html>
